@@ -1,0 +1,17 @@
+{
+  "name": "dir-listing",
+  "version": "0.0.1",
+  "description": "Creates an indexing webserver that serves index and content over a webserver",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel src -d dist/"
+  },
+  "author": "Henrik 'catears' Adolfsson",
+  "license": "MIT",
+  "devDependencies": {
+    "babel": "^6.23.0",
+    "babel-cli": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1"
+  }
+}
