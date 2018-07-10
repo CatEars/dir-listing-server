@@ -1,9 +1,9 @@
-import path from 'path';
-import fs from 'fs';
-import React from 'react';
-import express from 'express';
-import { renderToString } from 'react-dom/server';
-import { sortBy } from 'lodash';
+import path from 'path'
+import fs from 'fs'
+import React from 'react'
+import express from 'express'
+import { renderToString } from 'react-dom/server'
+import { sortBy } from 'lodash'
 
 const Link = ({ link }) => (
     <li>
@@ -12,7 +12,7 @@ const Link = ({ link }) => (
             className={link.isDirectory ? "red-text text-lighten-2" : "teal-text text-lighten-2"}
         >{link.name}</a>
     </li>
-);
+)
 
 const LinkList = ({ children }) => {
     return (
@@ -31,81 +31,106 @@ const generateLinks = (links) => {
 }
 
 const generateStyle = (() => {
-    const stylePath = path.resolve(__dirname, 'style.css');
-    let styleStr = '';
+    const stylePath = path.resolve(__dirname, 'style.css')
+    let styleStr = ''
     try {
-        styleStr = fs.readFileSync(stylePath, { encoding: 'utf-8' });
+        styleStr = fs.readFileSync(stylePath, { encoding: 'utf-8' })
     } catch(err) {
-        console.log('Could not load the stylesheet :/, deploying empty style');
+        console.log('Could not load the stylesheet :/, deploying empty style')
     }
 
     return () => {
-        return <style>{styleStr}</style>;
+        return <style dangerouslySetInnerHTML={{__html: styleStr}}></style>
     }
 
 })()
 
-const generatePage = (links) => {
+const HeaderNavCrumb = ({ folder, link }) => (
+    <a href={link} className="breadcrumb">{folder}</a>
+)
+
+const generateHeaderText = (cwd, links) => {
+    const parts = cwd.split(path.sep).filter(k => !!k);
+    const partsWithPath = parts.reduce((accumulator, curr) => {
+        return accumulator.concat({
+            name: curr,
+            hostPath: `${accumulator[accumulator.length - 1].hostPath}/${curr}`
+        })
+    }, [{
+        name: '/',
+        hostPath: '/?path='
+    }]);
+    partsWithPath[0].hostPath = '/';
+    let n = 0;
+
     return (
-        <html>
-            <head>
-                {generateStyle()}
-                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css" />
-                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-            </head>
-            <body>
-                <div className="root container">
-                    {generateLinks(sortBy(links, link => link.name))}
+        <nav>
+            <div className="nav-wrapper">
+                <div className="col s12 top-header">
+                    {partsWithPath.map(part => <HeaderNavCrumb key={`${n++}`} folder={part.name} link={part.hostPath} />)}
                 </div>
-            </body>
-        </html>
-    );
+            </div>
+        </nav>
+    )
 }
 
-const topDirectory = path.resolve(__dirname, '..');
+const generatePage = (cwd, links) => (
+    <html>
+        <head>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css" />
+            {generateStyle()}
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        </head>
+        <body>
+            <div className="root container">
+                <div className="header">
+                    {generateHeaderText(cwd, links)}
+                </div>
+                {generateLinks(sortBy(links, link => link.name))}
+            </div>
+        </body>
+    </html>
+)
+
+
+const topDirectory = path.resolve(__dirname, '..')
 
 const isDirectory = (fpath) => {
-    const fstat = fs.lstatSync(fpath);
-    return fstat.isDirectory();
+    const fstat = fs.lstatSync(fpath)
+    return fstat.isDirectory()
 }
 
 const discoverFrom = (directory) => {
-    const targets = fs.readdirSync(directory);
+    const targets = fs.readdirSync(directory)
     const generateLink = target => ({
         hostPath: `${path.relative(topDirectory, directory) || "."}/${target}`,
         name: target,
         isDirectory: isDirectory(`${directory}/${target}`)
-    });
+    })
 
-    const prelinks = [];
-    if (path.relative(topDirectory, directory)) {
-        // If this is not the topmost directory
-        prelinks.push(generateLink('..'));
-    }
-
-    return prelinks.concat(targets.map(generateLink));
+    return targets.map(generateLink)
 }
 
-const app = express();
-app.listen(3000);
+const app = express()
+app.listen(3000)
 app.get('/', (req, res) => {
-    let thePath = topDirectory;
+    let thePath = topDirectory
     if (req.query.path) {
         thePath = `${topDirectory}/${req.query.path}`
     }
-    thePath = path.resolve(thePath);
-    console.log('The path:', thePath);
+    thePath = path.resolve(thePath)
 
     if (!thePath.startsWith(topDirectory)) {
-        res.status(403).send('Top Secret!');
-        return;
+        res.status(403).send('Top Secret!')
+        return
     }
 
     if (isDirectory(thePath)) {
-        const links = discoverFrom(thePath);
-        res.send(renderToString(generatePage(links)));
+        const links = discoverFrom(thePath)
+        const asRelative = path.relative(topDirectory, thePath)
+        res.send(renderToString(generatePage(`/${asRelative}`, links)))
     } else {
-        res.download(thePath);
+        res.download(thePath)
     }
 })
 
