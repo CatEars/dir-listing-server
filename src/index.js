@@ -3,9 +3,16 @@ import fs from 'fs';
 import React from 'react';
 import express from 'express';
 import { renderToString } from 'react-dom/server';
-import { cond } from 'lodash';
+import { sortBy } from 'lodash';
 
-const Link = ({ link }) => <li><a href={`/?path=${encodeURIComponent(link.hostPath)}`}>{link.name}</a></li>;
+const Link = ({ link }) => (
+    <li>
+        <a
+            href={`/?path=${encodeURIComponent(link.hostPath)}`}
+            className={link.isDirectory ? "red-text text-lighten-2" : "teal-text text-lighten-2"}
+        >{link.name}</a>
+    </li>
+);
 
 const LinkList = ({ children }) => {
     return (
@@ -43,11 +50,12 @@ const generatePage = (links) => {
         <html>
             <head>
                 {generateStyle()}
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css" />
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             </head>
             <body>
-                <div className="root">
-                    {generateLinks(links)}
+                <div className="root container">
+                    {generateLinks(sortBy(links, link => link.name))}
                 </div>
             </body>
         </html>
