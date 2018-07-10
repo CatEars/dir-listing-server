@@ -16,3 +16,23 @@
     white-space: nowrap;
 }
 
+.directory:before {
+    font-family: FontAwesome;
+    font-size: 1em;
+    margin-right: 1.74em;
+    content: '\f054';
+}
+
+.item:before {
+    font-family: FontAwesome;
+    font-size: 1em;
+    margin-right: 1.5em;
+    content: '\f019';
+}
+
+.homelink:after {
+    font-family: FontAwesome;
+    font-size: 1em;
+    content: '\f015';
+    width: 20px;
+}
