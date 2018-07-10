@@ -1,5 +1,6 @@
 .top-header {
     margin-left: 1em;
+    margin-right: 1em;
 }
 
 .breadcrumb:before {
@@ -8,3 +9,10 @@
     content: '\f054';
     margin-left: 1em;
 }
+
+.horizontal-scroll {
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+}
+

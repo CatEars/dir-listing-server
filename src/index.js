@@ -66,7 +66,7 @@ const generateHeaderText = (cwd, links) => {
     return (
         <nav>
             <div className="nav-wrapper">
-                <div className="col s12 top-header">
+                <div className="col s12 top-header horizontal-scroll">
                     {partsWithPath.map(part => <HeaderNavCrumb key={`${n++}`} folder={part.name} link={part.hostPath} />)}
                 </div>
             </div>
