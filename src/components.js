@@ -1,5 +1,6 @@
 import React from 'react'
 import { sep as separator } from 'path'
+import filesize from 'filesize'
 
 export const Link = ({ link }) => (
     <li>
@@ -10,13 +11,15 @@ export const Link = ({ link }) => (
                        "red-text text-lighten-2 directory" :
                        "teal-text text-lighten-2 item"
                       }
-        >{link.name}</a>
+        >{link.name}{
+                !link.isDirectory  && ` (${filesize(link.fileSize)})`
+         }</a>
     </li>
 )
 
 export const LinkList = ({ children }) => {
     return (
-        <ul>
+        <ul className="horizontal-scroll">
             {children}
         </ul>
     )

@@ -11,11 +11,15 @@ export const isDirectory = (fpath) => {
 export const discoverFrom = (directory) => {
     const targets = fs.readdirSync(directory)
     const getHostPath = target => `${path.relative(topDirectory, directory) || "."}/${target}`
-    const generateLink = target => ({
-        hostPath: getHostPath(target),
-        name: target,
-        isDirectory: isDirectory(`${directory}/${target}`)
-    })
+    const generateLink = target => {
+        const isDir = isDirectory(`${directory}/${target}`);
+        return ({
+            hostPath: getHostPath(target),
+            name: target,
+            isDirectory: isDir,
+            fileSize: fs.lstatSync(`${directory}/${target}`).size
+        })
+    }
 
     return targets.map(generateLink)
 }
