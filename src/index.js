@@ -52,28 +52,64 @@ const generatePage = (cwd, links) => (
     </html>
 )
 
+const generateError = () => (
+    <html>
+        <head>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css" />
+            {generateStyle()}
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        </head>
+        <body>
+            <div className="root container">
+                <p>This is the error page. you have probably encountered an error. If you are a site administrator you should check the logs. Otherwise you can look at some of the know errors listed below.</p>
+                <div className="row">
+                    <div className="col s12 m6">
+                        <div className="card blue-grey darken-1">
+                            <div className="card-content white-text">
+                                <span className="card-title">
+                                    Symlinks on remote hosts
+                                </span>
+                                <p>
+                                    Following a symlink on a remote machine (such as through sshfs) is not possible. The remote link does not redirect well, unfortunately. If you need to work with a lot of symlinks, then I am afraid this is not the package for you! If you are using SSHFS then symlinks are perhaps neither the correct choice for you.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </body>
+    </html>
+)
+
 export const start = ({ onFinish }) => {
     const app = express()
     app.listen(process.env.DIR_LISTING_EXPOSED_PORT || 4455);
     app.get('/', (req, res) => {
-        let thePath = topDirectory
-        if (req.query.path) {
-            thePath = `${topDirectory}/${req.query.path}`
-        }
-        thePath = path.resolve(thePath)
-        console.log(thePath);
+        try {
+            let thePath = topDirectory
+            if (req.query.path) {
+                thePath = `${topDirectory}/${req.query.path}`
+            }
 
-        if (!isSubDirectoryOfTop(thePath)) {
-            res.status(403).send('Top Secret!')
-            return
-        }
+            thePath = path.resolve(fs.realpathSync(thePath))
+            console.log(thePath);
 
-        if (isDirectory(thePath) || isSymlink(thePath)) {
-            const links = discoverFrom(thePath)
-            const asRelative = path.relative(topDirectory, thePath)
-            res.send(renderToString(generatePage(`/${asRelative}`, links)))
-        } else {
-            res.download(thePath)
+            if (!isSubDirectoryOfTop(thePath)) {
+                res.status(403).send('Top Secret!')
+                return
+            }
+
+
+            if (isDirectory(thePath) || isSymlink(thePath)) {
+                const links = discoverFrom(thePath)
+                const asRelative = path.relative(topDirectory, thePath)
+                res.send(renderToString(generatePage(`/${asRelative}`, links)))
+            } else {
+                res.download(thePath)
+            }
+        } catch (err) {
+            console.error(err)
+            res.status(500).send(renderToString(generateError()))
         }
     })
     process.on('exit', onFinish)
