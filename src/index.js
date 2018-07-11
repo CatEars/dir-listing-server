@@ -51,26 +51,30 @@ const generatePage = (cwd, links) => (
     </html>
 )
 
-const app = express()
-app.listen(process.env.DIR_LISTING_EXPOSED_PORT || 4455);
-app.get('/', (req, res) => {
-    let thePath = topDirectory
-    if (req.query.path) {
-        thePath = `${topDirectory}/${req.query.path}`
-    }
-    thePath = path.resolve(thePath)
-    console.log(thePath);
+export const start = ({ onFinish }) => {
+    const app = express()
+    app.listen(process.env.DIR_LISTING_EXPOSED_PORT || 4455);
+    app.get('/', (req, res) => {
+        let thePath = topDirectory
+        if (req.query.path) {
+            thePath = `${topDirectory}/${req.query.path}`
+        }
+        thePath = path.resolve(thePath)
+        console.log(thePath);
 
-    if (!isSubDirectoryOfTop(thePath)) {
-        res.status(403).send('Top Secret!')
-        return
-    }
+        if (!isSubDirectoryOfTop(thePath)) {
+            res.status(403).send('Top Secret!')
+            return
+        }
 
-    if (isDirectory(thePath)) {
-        const links = discoverFrom(thePath)
-        const asRelative = path.relative(topDirectory, thePath)
-        res.send(renderToString(generatePage(`/${asRelative}`, links)))
-    } else {
-        res.download(thePath)
-    }
-})
+        if (isDirectory(thePath)) {
+            const links = discoverFrom(thePath)
+            const asRelative = path.relative(topDirectory, thePath)
+            res.send(renderToString(generatePage(`/${asRelative}`, links)))
+        } else {
+            res.download(thePath)
+        }
+    })
+    process.on('exit', onFinish)
+}
+
