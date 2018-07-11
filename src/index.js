@@ -11,6 +11,7 @@ import {
 import {
     topDirectory,
     isDirectory,
+    isSymlink,
     discoverFrom,
     isSubDirectoryOfTop
 } from './fileSystem'
@@ -67,7 +68,7 @@ export const start = ({ onFinish }) => {
             return
         }
 
-        if (isDirectory(thePath)) {
+        if (isDirectory(thePath) || isSymlink(thePath)) {
             const links = discoverFrom(thePath)
             const asRelative = path.relative(topDirectory, thePath)
             res.send(renderToString(generatePage(`/${asRelative}`, links)))
@@ -78,3 +79,7 @@ export const start = ({ onFinish }) => {
     process.on('exit', onFinish)
 }
 
+
+if (require.main === module) {
+    start({ onFinish: () => {} });
+}

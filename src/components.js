@@ -9,10 +9,12 @@ export const Link = ({ link }) => (
             className={
                 link.isDirectory ?
                        "red-text text-lighten-2 directory" :
+                       link.isSymlink ?
+                       "blue-text text-lighten-2 symlink" :
                        "teal-text text-lighten-2 item"
                       }
         >{link.name}{
-                !link.isDirectory  && ` (${filesize(link.fileSize)})`
+                !link.isDirectory && !link.isSymlink  && ` (${filesize(link.fileSize)})`
          }</a>
     </li>
 )

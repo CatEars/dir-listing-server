@@ -23,6 +23,13 @@
     content: '\f054';
 }
 
+.symlink:before {
+    font-family: FontAwesome;
+    font-size: 1em;
+    margin-right: 1.74em;
+    content: '\f054';
+}
+
 .item:before {
     font-family: FontAwesome;
     font-size: 1em;
