@@ -6,7 +6,8 @@ import { renderToString } from 'react-dom/server'
 import {
     LinkList,
     Link,
-    HeaderText
+    HeaderText,
+    ErrorCards
 } from './components'
 import {
     topDirectory,
@@ -62,20 +63,7 @@ const generateError = () => (
         <body>
             <div className="root container">
                 <p>This is the error page. you have probably encountered an error. If you are a site administrator you should check the logs. Otherwise you can look at some of the know errors listed below.</p>
-                <div className="row">
-                    <div className="col s12 m6">
-                        <div className="card blue-grey darken-1">
-                            <div className="card-content white-text">
-                                <span className="card-title">
-                                    Symlinks on remote hosts
-                                </span>
-                                <p>
-                                    Following a symlink on a remote machine (such as through sshfs) is not possible. The remote link does not redirect well, unfortunately. If you need to work with a lot of symlinks, then I am afraid this is not the package for you! If you are using SSHFS then symlinks are perhaps neither the correct choice for you.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <ErrorCards />
             </div>
         </body>
     </html>

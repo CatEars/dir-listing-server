@@ -62,3 +62,35 @@ export const HeaderText = ({cwd, links}) => {
         </nav>
     )
 }
+
+const goBackString = `<a href="#" onclick="window.history.back();">Go Back</a>`
+
+export const ErrorCards = () => (
+    <div className="row">
+        <div className="col s12 m6">
+            <div className="card blue-grey darken-1">
+                <div className="card-content white-text">
+                    <span className="card-title">
+                        Symlinks on remote hosts
+                    </span>
+                    <p>
+                        Following a symlink on a remote machine (such as through sshfs) is not possible. The remote link does not redirect well, unfortunately. If you need to work with a lot of symlinks, then I am afraid this is not the package for you! If you are using SSHFS then symlinks are perhaps neither the correct choice for you.
+                    </p>
+                </div>
+            </div>
+            <div className="card blue-grey darken-1">
+                <div className="card-content white-text">
+                    <span className="card-title">
+                        Permission Errors
+                    </span>
+                    <p>
+                        If you can read the existence of a folder but do not have the permission to read inside it you might encounter problems when trying to enter that folder. Similar problems can occur if you try to download a file which you can see exists, but not access. For example /etc/shadow.
+                    </p>
+                </div>
+                <div className="card-action" dangerouslySetInnerHTML={{__html: goBackString}}>
+                </div>
+            </div>
+        </div>
+    </div>
+
+)
