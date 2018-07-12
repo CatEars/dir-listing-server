@@ -45,3 +45,12 @@ start({
 })
 
 ```
+
+# Deployment with Dockerfile
+
+The included `Dockerfile` builds a docker image which can serve from
+within the container. If you want to put the index server within
+something like a Docker Swarm then I would suggest you add a volume to
+the container and serve that volume with for example
+
+`docker run --env DIR_LISTING_TOP_DIRECTORY=/root/served --volume /path/to/my/directory:/root/served -p 4455:4455 dir-listing`

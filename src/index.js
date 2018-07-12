@@ -80,7 +80,6 @@ export const start = ({ onFinish }) => {
             }
 
             thePath = path.resolve(fs.realpathSync(thePath))
-            console.log(thePath);
 
             if (!isSubDirectoryOfTop(thePath)) {
                 res.status(403).send('Top Secret!')
