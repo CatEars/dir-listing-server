@@ -54,3 +54,7 @@ something like a Docker Swarm then I would suggest you add a volume to
 the container and serve that volume with for example
 
 `docker run --env DIR_LISTING_TOP_DIRECTORY=/root/served --volume /path/to/my/directory:/root/served -p 4455:4455 dir-listing`
+
+I personally use this with
+[sshfs](https://en.wikipedia.org/wiki/SSHFS) to view and browse
+several directories and files from the same webpage.
