@@ -13,11 +13,11 @@ HTML.
 
 We use [materializecss](https://materializecss.com/) to make
 everything look good and utilize [express.js](https://expressjs.com/)
-as a webserver. Additionally we also use react to create a server-side
-rendering of the index. The result is that no javascript is used
-(okay, it is used in like one place to go back to the previous page,
-but ya know) and the page can easily be crawled by both a human and a
-machine.
+as a webserver. Additionally we also use [react](https://reactjs.org/)
+to create a server-side rendering of the index. The result is that no
+javascript is used (okay, it is used in like one place to go back to
+the previous page, but ya know) and the page can easily be crawled by
+both a human and a machine.
 
 # Screenshots
 
@@ -28,3 +28,20 @@ Desktop:
 Mobile:
 
 ![What it looks like on mobile](https://i.imgur.com/LhHZIK9.png)
+
+
+# Deployment
+
+Example script for deploying (includes all available parameters):
+
+```javascript
+import { start } from 'dir-listing-server'
+
+console.log(`Deploying index server at ${DIR_LISTING_TOP_DIRECTORY}`)
+console.log(`Using port: ${DIR_LISTING_EXPOSED_PORT}`)
+
+start({
+    onFinish: () => {}
+})
+
+```
