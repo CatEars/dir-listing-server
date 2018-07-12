@@ -19,4 +19,4 @@ rendering of the index. The result is that no javascript is used
 but ya know) and the page can easily be crawled by both a human and a
 machine.
 
-[!What it looks like](https://i.imgur.com/8wdgFCW.png)
+![What it looks like](https://i.imgur.com/8wdgFCW.png)
