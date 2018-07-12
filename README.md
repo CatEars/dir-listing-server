@@ -19,4 +19,12 @@ rendering of the index. The result is that no javascript is used
 but ya know) and the page can easily be crawled by both a human and a
 machine.
 
+# Screenshots
+
+Desktop:
+
 ![What it looks like](https://i.imgur.com/8wdgFCW.png)
+
+Mobile:
+
+![What it looks like on mobile](https://i.imgur.com/LhHZIK9.png)
