@@ -33,13 +33,21 @@ const generateStyle = (() => {
 })()
 
 
+const generateHead = () => (
+    <head>
+        <link rel="stylesheet"
+              href="https://use.fontawesome.com/releases/v5.1.1/css/all.css"
+              integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ"
+              crossorigin="anonymous" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css" />
+        {generateStyle()}
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    </head>
+)
+
 const generatePage = (cwd, links) => (
     <html>
-        <head>
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css" />
-            {generateStyle()}
-            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        </head>
+        {generateHead()}
         <body>
             <div className="root container">
                 <div className="header">
@@ -55,11 +63,7 @@ const generatePage = (cwd, links) => (
 
 const generateError = () => (
     <html>
-        <head>
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css" />
-            {generateStyle()}
-            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        </head>
+        {generateHead()}
         <body>
             <div className="root container">
                 <p>This is the error page. you have probably encountered an error. If you are a site administrator you should check the logs. Otherwise you can look at some of the know errors listed below.</p>
